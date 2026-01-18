@@ -3,1474 +3,597 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>st1yler´s dev</title>
-
-  <!-- Apple-like font -->
+  <title>st1yler | Senior Lua Developer</title>
+  
+  <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <style>
-    :root {
-      --glass: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.18);
-      --text: #ffffff;
-      --sub: rgba(255,255,255,0.65);
-      --search-bg: rgba(255,255,255,0.05);
-      --search-border: rgba(255,255,255,0.15);
-      --search-focus: rgba(255,255,255,0.12);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, #111 0%, #000 60%);
-      color: var(--text);
-      scroll-behavior: smooth;
-    }
-
-    /* NAVBAR */
-    nav {
-      position: fixed;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      backdrop-filter: blur(20px);
-      background: var(--glass);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 10px 24px;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      z-index: 999;
-      min-width: 300px;
-      width: auto;
-      max-width: 1200px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--sub);
-      font-weight: 500;
-      transition: color 0.3s;
-      white-space: nowrap;
-    }
-
-    nav a:hover { color: #fff; }
-
-    /* Search Container */
-    .search-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      margin-left: auto;
-    }
-
-    .search-input {
-      background: var(--search-bg);
-      border: 1px solid var(--search-border);
-      border-radius: 999px;
-      padding: 8px 16px 8px 40px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      width: 0;
-      opacity: 0;
-      transition: all 0.3s ease;
-      outline: none;
-      min-height: 36px;
-    }
-
-    .search-input.expanded {
-      width: 220px;
-      opacity: 1;
-      margin-right: 8px;
-    }
-
-    .search-input:focus {
-      background: var(--search-focus);
-      border-color: rgba(255,255,255,0.3);
-    }
-
-    .search-input::placeholder {
-      color: rgba(255,255,255,0.4);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      color: var(--sub);
-      font-size: 14px;
-      cursor: pointer;
-      transition: color 0.3s;
-      z-index: 2;
-    }
-
-    .search-icon:hover {
-      color: #fff;
-    }
-
-    .search-close {
-      position: absolute;
-      right: 20px;
-      color: var(--sub);
-      font-size: 12px;
-      cursor: pointer;
-      opacity: 0;
-      transition: all 0.3s ease;
-      background: rgba(255,255,255,0.1);
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-    }
-
-    .search-input.expanded + .search-close {
-      opacity: 1;
-      right: 12px;
-    }
-
-    .search-close:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.2);
-    }
-
-    /* Search Results */
-    .search-results {
-      position: absolute;
-      top: calc(100% + 10px);
-      right: 0;
-      width: 320px;
-      background: rgba(20,20,20,0.95);
-      backdrop-filter: blur(30px);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 12px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-      z-index: 1000;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    .search-results.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .search-result-item {
-      padding: 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-
-    .search-result-item:hover {
-      background: rgba(255,255,255,0.08);
-    }
-
-    .search-result-item i {
-      color: var(--sub);
-      font-size: 14px;
-      width: 20px;
-      text-align: center;
-    }
-
-    .search-result-title {
-      font-weight: 500;
-      font-size: 14px;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-
-    .search-result-description {
-      font-size: 12px;
-      color: var(--sub);
-      line-height: 1.3;
-    }
-
-    .search-result-category {
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      margin-top: 4px;
-    }
-
-    .no-results {
-      padding: 20px;
-      text-align: center;
-      color: var(--sub);
-      font-size: 14px;
-    }
-
-    section {
-      max-width: 1200px;
-      margin: auto;
-      padding: 140px 24px 80px;
-    }
-
-    h1 {
-      font-size: 56px;
-      font-weight: 600;
-      letter-spacing: -1.5px;
-    }
-
-    h2 { font-size: 36px; margin-bottom: 24px; }
-    h3 { margin: 0 0 8px; font-weight: 500; }
-    p { color: var(--sub); }
-
-    /* HERO */
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 48px;
-      align-items: center;
-    }
-
-    .hero img {
-      width: 100%;
-      border-radius: 28px;
-      border: 1px solid var(--border);
-    }
-
-    /* NUEVO: Grid 3x3 para videos compactos */
-    .videos-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .videos-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .videos-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Tarjeta de video compacta */
-    .video-card-compact {
-      background: var(--glass);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      height: 100%;
-    }
-
-    .video-card-compact:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.3);
-    }
-
-    .video-thumbnail {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%; /* 16:9 aspect ratio */
-      overflow: hidden;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      background: #000;
-    }
-
-    .video-thumbnail iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .play-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.7);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      opacity: 0.9;
-      transition: all 0.3s ease;
-    }
-
-    .video-card-compact:hover .play-overlay {
-      background: rgba(0,0,0,0.9);
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-
-    /* Modal para video expandido estilo Macbook */
-    .video-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.9);
-      backdrop-filter: blur(30px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 10000;
-    }
-
-    .video-modal.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    /* Ventana estilo Macbook */
-    .mac-video-window {
-      position: relative;
-      background: rgba(20,20,20,0.85);
-      backdrop-filter: blur(40px);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 18px;
-      width: 90%;
-      max-width: 1000px;
-      transform: scale(0.95);
-      transition: transform 0.35s ease;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    }
-
-    .video-modal.active .mac-video-window {
-      transform: scale(1);
-    }
-
-    /* Header de Macbook */
-    .mac-video-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      background: rgba(30,30,30,0.8);
-      border-bottom: 1px solid rgba(255,255,255,0.15);
-    }
-
-    .mac-controls {
-      display: flex;
-      gap: 10px;
-      margin-left: 8px;
-    }
-
-    .mac-video-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      position: relative;
-      box-shadow: 0 1px 0 rgba(0,0,0,0.25) inset;
-    }
-
-    .mac-video-dot:hover {
-      transform: scale(1.1);
-    }
-
-    .mac-video-red { 
-      background: #ff5f56; 
-      cursor: pointer;
-    }
-    .mac-video-red:hover::after {
-      content: "×";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: rgba(0,0,0,0.6);
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .mac-video-yellow { 
-      background: #ffbd2e; 
-      cursor: pointer;
-    }
-    .mac-video-yellow:hover::after {
-      content: "─";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: rgba(0,0,0,0.6);
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .mac-video-green { 
-      background: #27c93f; 
-      cursor: pointer;
-    }
-    .mac-video-green:hover::after {
-      content: "⏏";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: rgba(0,0,0,0.6);
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .video-title-bar {
-      flex: 1;
-      text-align: center;
-      font-size: 14px;
-      color: rgba(255,255,255,0.7);
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      padding: 0 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    /* Contenido del video */
-    .mac-video-content {
-      padding: 0;
-      position: relative;
-    }
-
-    .mac-video-content iframe {
-      width: 100%;
-      height: 70vh;
-      min-height: 400px;
-      border: 0;
-      display: block;
-    }
-
-    /* Grid para modeling cards (mantenido) */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 32px;
-    }
-
-    .card {
-      background: var(--glass);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 20px;
-      backdrop-filter: blur(20px);
-    }
-
-    img, video {
-      width: 100%;
-      border-radius: 20px;
-      margin-top: 14px;
-      transition: transform 0.45s ease, filter 0.45s ease;
-    }
-
-    /* Payments thumbnails: uniform size and cropped with object-fit */
-    #payments .grid img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      margin-top: 14px;
-    }
-
-    @media (max-width: 768px) {
-      #payments .grid img {
-        height: 120px;
-      }
-    }
-
-    /* Hover selection: slightly scale images/videos on hover, no blur */
-    img:hover, video:not(.playing):hover {
-      transform: scale(1.03);
-      filter: none;
-    }
-
-    /* FOOTER */
-    footer {
-      margin-top: 120px;
-      padding: 80px 24px;
-      background: linear-gradient(to top, #000, #0a0a0a);
-      border-top: 1px solid var(--border);
-      text-align: center;
-    }
-
-    /* Copyright / small footer line */
-    .copyright {
-      margin-top: 18px;
-      font-size: 13px;
-      color: var(--sub);
-      opacity: 0.95;
-      letter-spacing: 0.2px;
-    }
-
-    .contact {
-      display: flex;
-      gap: 40px;
-      justify-content: center;
-      font-size: 28px;
-      margin-top: 32px;
-    }
-
-    .contact a {
-      color: white;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-
-    .contact a:hover {
-      transform: scale(1.2);
-      opacity: 0.8;
-    }
-
-    @media (max-width: 768px) {
-      .hero { grid-template-columns: 1fr; }
-      h1 { font-size: 40px; }
-      .mac-video-window {
-        width: 95%;
-        margin: 10px;
-      }
-      .mac-video-content iframe {
-        height: 50vh;
-        min-height: 300px;
-      }
-      
-      /* Nav responsive */
-      nav {
-        padding: 10px 20px;
-        gap: 16px;
-        width: 95%;
-      }
-      
-      .nav-links {
-        gap: 16px;
-      }
-      
-      .search-input.expanded {
-        width: 160px;
-      }
-      
-      .search-results {
-        width: 280px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      nav {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 12px;
-        border-radius: 20px;
-      }
-      
-      .nav-links {
-        order: 2;
-        width: 100%;
-        justify-content: center;
-        margin-top: 10px;
-      }
-      
-      .search-container {
-        order: 1;
-        margin-left: 0;
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .search-input.expanded {
-        width: 100%;
-      }
-      
-      .search-results {
-        width: 95%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-10px);
-      }
-      
-      .search-results.active {
-        transform: translateX(-50%) translateY(0);
-      }
-    }
-
-    /* ===== MACOS IMAGE VIEWER ===== */
-    .image-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(30px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s ease;
-      z-index: 9999;
-    }
-
-    .image-modal.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .mac-window {
-      position: relative;
-      background: rgba(20,20,20,0.75);
-      backdrop-filter: blur(40px);
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 18px;
-      padding: 18px;
-      max-width: 85%;
-      max-height: 85%;
-      transform: scale(0.92);
-      transition: transform .35s ease;
-      overflow: auto;
-    }
-
-    .image-modal.active .mac-window {
-      transform: scale(1);
-    }
-
-    /* When showing the original-size image, don't constrain it with max-width/height */
-    .mac-window img.original-size {
-      max-width: none;
-      max-height: none;
-      display: block;
-    }
-
-    .mac-header {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .mac-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      box-shadow: 0 1px 0 rgba(0,0,0,0.25) inset;
-      transition: transform .12s ease, opacity .12s ease;
-      display: inline-block;
-    }
-
-    .mac-dot:focus {
-      outline: 2px solid rgba(255,255,255,0.06);
-      transform: translateY(-1px);
-    }
-
-    .mac-red { background: #ff5f56; cursor: pointer; }
-    .mac-red:hover { transform: translateY(-1px); }
-    .mac-yellow { background: #ffbd2e; cursor: default; }
-    .mac-green { background: #27c93f; cursor: default; }
-
-    .mac-window img {
-      max-width: 100%;
-      max-height: 65vh;
-      border-radius: 12px;
-    }
-
-    .modal-media {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 320px;
-    }
-
-    .mac-window video {
-      max-width: 100%;
-      max-height: 70vh;
-      border-radius: 12px;
-      background: #000;
-    }
-
-    /* ===== DISABLE EFFECTS WHEN MODAL OPEN ===== */
-    body.modal-open * {
-      pointer-events: none;
-    }
-
-    body.modal-open .image-modal,
-    body.modal-open .image-modal * {
-      pointer-events: auto;
-    }
-
-    body.modal-open img,
-    body.modal-open video {
-      filter: none !important;
-      transform: none !important;
-    }
-
-    body.modal-open img:hover,
-    body.modal-open video:hover {
-      filter: none !important;
-      transform: none !important;
-    }
-    
-    .subtitle {
-      display: block;
-      margin-top: 4px;
-      font-size: 14px;
-      color: rgba(255,255,255,0.55);
-      letter-spacing: .2px;
-    }
-    
-    .payments-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .payments-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 480px) {
-      .payments-grid { grid-template-columns: 1fr; }
-    }
-
-    .payment-card {
-      width: 100%;
-      height: 190px;
-      border-radius: 18px;
-      overflow: hidden;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .payment-card img {
-      width: 110%;
-      height: 120%;
-      object-fit: cover;
-    }
-
-    /* Estilo para sección de scripting */
-    #scripting .section-header {
-      margin-bottom: 30px;
-    }
-
-    .video-title {
-      font-size: 16px;
-      margin: 10px 0 5px 0;
-      font-weight: 500;
-    }
-
-    .video-description {
-      font-size: 13px;
-      color: var(--sub);
-      line-height: 1.4;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  
   <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230e0e0e'/%3E%3Ctext x='50' y='68' font-family='Inter,Arial' font-size='56' fill='%23ffffff' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="favicon.ico">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230e0e0e'/%3E%3Ctext x='50' y='68' font-family='Inter,Arial' font-size='56' fill='%23ffffff' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" type="image/svg+xml">
   <meta name="theme-color" content="#000000">
 </head>
 
 <body>
-
-<nav>
-  <div class="nav-links">
-    <a href="#scripting">Scripting</a>
-    <a href="#modeling">Modeling</a>
-    <a href="#contact">Contact</a>
-  </div>
-  
-  <div class="search-container">
-    <div class="search-icon" id="searchIcon">
-      <i class="fas fa-search"></i>
-    </div>
-    <input 
-      type="text" 
-      class="search-input" 
-      id="searchInput" 
-      placeholder="Search projects..." 
-      autocomplete="off"
-    >
-    <div class="search-close" id="searchClose">
-      <i class="fas fa-times"></i>
-    </div>
-    <div class="search-results" id="searchResults"></div>
-  </div>
-</nav>
-
-<section class="hero">
-  <div>
-    <h1>st1yler´s dev</h1>
-    <p>
-      Roblox Developer specialized in advanced scripting systems and high-quality modeling,
-      with experience building scalable game architectures using Rojo and structured
-      development workflows for professional Roblox projects.
-    </p>
-  </div>
-  <img src="static/profile.png">
-</section>
-
-<section id="scripting">
-  <h2>Scripting — Past Works</h2>
-  
-  <div class="videos-grid" id="videosGrid">
-    <!-- Videos en grid 3x3 -->
-    <div class="video-card-compact" data-video-id="1151425867" data-title="Advanced Movement" data-description="Physics-based character controller" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://player.vimeo.com/video/1151425867?badge=0&autopause=0&player_id=0&app_id=58479&background=1&autoplay=0&loop=1&byline=0&title=0"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Advanced Movement</div>
-      <div class="video-description">Physics-based character controller</div>
-    </div>
-
-    <div class="video-card-compact" data-video-id="1151425774" data-title="Advanced Animation" data-description="State machines & blending system" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://player.vimeo.com/video/1151425774?badge=0&autopause=0&player_id=0&app_id=58479&background=1&autoplay=0&loop=1&byline=0&title=0"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Advanced Animation</div>
-      <div class="video-description">State machines & blending system</div>
-    </div>
-
-    <div class="video-card-compact" data-video-id="1151425881" data-title="PBZ Complete Game" data-description="Ai Bossfight And Zombies, Leveling, Game modes, scallabe, easy to handle the rounds system and the diferents difficults" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://player.vimeo.com/video/1151425881?badge=0&autopause=0&player_id=0&app_id=58479&background=1&autoplay=0&loop=1&byline=0&title=0"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">PBZ Complete Game</div>
-      <div class="video-description">Ai Bossfight And Zombies, Leveling, Game modes, scallabe, easy to handle the rounds system and the diferents difficults</div>
-    </div>
-
-<div class="video-card-compact" data-video-id="1155631862" data-title="Shop UI DATASTORE" data-description="Modular Shop UI with Datastore integration and easy way to manage items" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://vimeo.com/1155631862?fl=ip&fe=ec"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Shop UI DATASTORE</div>
-      <div class="video-description">Modular Shop UI with Datastore integration and easy way to manage items</div>
-    </div>
-
-
-<div class="video-card-compact" data-video-id="1155631838" data-title="Modular Map Round System team-based" data-description="Modular map round system with easy way to manage rounds and maps, only adding the name of the map in a workspace folder, and the thumbnail in the model poperties!" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://vimeo.com/1155631838?fl=ip&fe=ec"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Modular Map Round System team-based</div>
-      <div class="video-description">Modular map round system with easy way to manage rounds and maps, only adding the name of the map in a workspace folder, and the thumbnail in the model poperties!</div>
-    </div>
-
-    <div class="video-card-compact" data-video-id="1155631800" data-title="RPG Camera" data-description="Dynamic Spectate system, with filters by team and friends spectate, easy to use and add in your game , Optimized , made with only 1 script for all the plants possible!" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://vimeo.com/1155631800?fl=ip&fe=ec"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Physics-based Smart Plants</div>
-      <div class="video-description">Dynamic Spectate system, with filters by team and friends spectate, easy to use and add in your game , Optimized , made with only 1 script for all the plants possible! </div>
-    </div>
-  <div class="video-card-compact" data-video-id="1155631827" data-title="RPG Camera" data-description="Dynamic Spectate system, with filters by team and friends spectate, easy to use and add in your game with your own ui style!" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://vimeo.com/1155631827?fl=ip&fe=ec"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Modular Spectate system</div>
-      <div class="video-description">Dynamic Spectate system, with filters by team and friends spectate, easy to use and add in your game with your own ui style!</div>
-    </div>
-
-    <div class="video-card-compact" data-video-id="1151425860" data-title="Dialog NPC" data-description="Branching dialogue system" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://player.vimeo.com/video/1151425860?badge=0&autopause=0&player_id=0&app_id=58479&background=1&autoplay=0&loop=1&byline=0&title=0"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Dialog NPC</div>
-      <div class="video-description">Branching dialogue system</div>
-    </div>
-
-    <div class="video-card-compact" data-video-id="1151425929" data-title="Advanced FPS Gun Framework" data-description="Realistic FPS weapons with custom animations" data-category="scripting">
-      <div class="video-thumbnail">
-        <iframe 
-          src="https://player.vimeo.com/video/1151425929?badge=0&autopause=0&player_id=0&app_id=58479&background=1&autoplay=0&loop=1&byline=0&title=0"
-          frameborder="0" 
-          allow="autoplay; fullscreen; picture-in-picture" 
-          allowfullscreen>
-        </iframe>
-        <div class="play-overlay">
-          <i class="fas fa-play"></i>
-        </div>
-      </div>
-      <div class="video-title">Advanced FPS Gun Framework</div>
-      <div class="video-description">Realistic FPS weapons with custom animations</div>
+  <!-- Loading Animation -->
+  <div class="loader">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Initializing portfolio...</div>
     </div>
   </div>
-</section>
 
-<!-- Modal para video expandido estilo Macbook -->
-<div class="video-modal" id="videoModal">
-  <div class="mac-video-window">
-    <div class="mac-video-header">
-      <div class="mac-controls">
-        <div class="mac-video-dot mac-video-red" id="closeVideoModal"></div>
-        <div class="mac-video-dot mac-video-yellow" id="minimizeVideo"></div>
-        <div class="mac-video-dot mac-video-green" id="fullscreenVideo"></div>
+  <!-- Particle Background -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span class="logo-text">st1yler</span>
+        <span class="logo-badge">DEV</span>
       </div>
-      <div class="video-title-bar" id="videoModalTitle">Video Preview</div>
-      <div style="width: 60px;"></div> <!-- Espaciador para centrar el título -->
-    </div>
-    <div class="mac-video-content">
-      <iframe id="expandedVideo" 
-        frameborder="0" 
-        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-        allowfullscreen>
-      </iframe>
-    </div>
-  </div>
-</div>
-
-<section id="modeling">
-  <h2>Modeling — Past Works</h2>
-
-  <div class="grid">
-    <div class="card" data-title="bundles" data-description="bundles and characters" data-category="modeling">
-      <h3>bundles</h3>
-      <small class="subtitle">bundles and characters</small>
-      <img src="static/modeling/bundles/bundle1.png" alt="Bundle 1">
-      <img src="static/modeling/bundles/bundle2.png" alt="Bundle 2">
-      <img src="static/modeling/bundles/bundle3.png" alt="Bundle 3">
-      <img src="static/modeling/bundles/bundle4.png" alt="Bundle 4">
-      <img src="static/modeling/bundles/bundle5.png" alt="Bundle 5">
-    </div>
-    <div class="card" data-title="mapping" data-description="mapping and housing" data-category="modeling">
-      <h3>mapping</h3>
-      <small class="subtitle">mapping and housing</small>
-      <img src="static/modeling/mapping/map1.png" alt="Map 1">
-      <img src="static/modeling/mapping/map2.png" alt="Map 2">
-      <img src="static/modeling/mapping/map3.png" alt="Map 3">
-      <img src="static/modeling/mapping/map4.png" alt="Map 4">
-      <img src="static/modeling/mapping/map5.png" alt="Map 5">
-    </div>
-    <div class="card" data-title="weapons" data-description="weapons and accessories" data-category="modeling">
-      <h3>weapons</h3>
-      <small class="subtitle">weapons and accessories</small>
-      <img src="static/modeling/weapons/weapon1.png" alt="Weapon 1">
-      <img src="static/modeling/weapons/weapon2.png" alt="Weapon 2">
-      <img src="static/modeling/weapons/weapon3.png" alt="Weapon 3">
-      <img src="static/modeling/weapons/weapon4.png" alt="Weapon 4">
-      <img src="static/modeling/weapons/weapon5.png" alt="Weapon 5">
-    </div>
-    </div>
-</section>
-<section id="payments">
-  <h2>Payments</h2>
-  <div class="card">
-    <div class="payments-grid">
-      <div class="payment-card"><img src="static/payments/payment1.png" alt="payment 1"></div>
-      <div class="payment-card"><img src="static/payments/payment2.png" alt="payment 2"></div>
-      <div class="payment-card"><img src="static/payments/payment3.png" alt="payment 3"></div>
-      <div class="payment-card"><img src="static/payments/payment4.png" alt="payment 4"></div>
-      <div class="payment-card"><img src="static/payments/payment5.png" alt="payment 5"></div>
-      <div class="payment-card"><img src="static/payments/payment6.png" alt="payment 6"></div>
-      <div class="payment-card"><img src="static/payments/payment7.png" alt="payment 7"></div>
-      <div class="payment-card"><img src="static/payments/payment8.png" alt="payment 8"></div>
-      <div class="payment-card"><img src="static/payments/payment9.png" alt="payment 9"></div>
-    </div>
-  </div>
-</section>
-<footer id="contact">
-  <h2>Contact Me</h2>
-  <div class="contact">
-    <!-- Discord: se puede abrir Discord con un enlace a usuario mediante el tag, aunque no es clicable directamente -->
-    <a href="https://discord.com/users/1044626710_w" target="_blank" title="st1yler´s Discord">
-      <i class="fa-brands fa-discord"></i>
-    </a>
-    
-    <!-- GitHub: enlace directo -->
-    <a href="https://github.com/st1yler" target="_blank" title="GitHub">
-      <i class="fa-brands fa-github"></i>
-    </a>
-    
-    <!-- Roblox: enlace a perfil -->
-    <a href="https://www.roblox.com/users/10293637061/profile" target="_blank" title="Roblox">
-      <i class="fa-solid fa-play"></i>
-    </a>
-  </div>
-  <div class="copyright">
-    © 2026 st1yler. Todos los derechos reservados. Sypcho &amp; Asimcro.
-  </div>
-</footer>
-
-<!-- IMAGE/VIDEO MODAL -->
-<div class="image-modal" id="imageModal" aria-hidden="true" role="dialog" aria-label="Media preview">
-  <div class="mac-window" role="document">
-    <div class="mac-header" aria-hidden="false">
-      <div class="mac-dot mac-red" id="closeModal" role="button" tabindex="0" aria-label="Close"></div>
-      <div class="mac-dot mac-yellow" role="button" tabindex="-1" aria-hidden="true"></div>
-      <div class="mac-dot mac-green" role="button" tabindex="-1" aria-hidden="true"></div>
-    </div>
-    <div class="modal-media">
-      <img id="modalImage" alt="Expanded image preview" style="display:none;">
-      <video id="modalVideo" controls controlsList="nofullscreen" disablePictureInPicture style="display:none;" aria-label="Expanded video preview"></video>
-    </div>
-  </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Elementos del buscador
-  const searchIcon = document.getElementById('searchIcon');
-  const searchInput = document.getElementById('searchInput');
-  const searchClose = document.getElementById('searchClose');
-  const searchResults = document.getElementById('searchResults');
-  
-  // Elementos de contenido para buscar
-  const videoCards = document.querySelectorAll('.video-card-compact');
-  const modelingCards = document.querySelectorAll('#modeling .card');
-  const sectionHeadings = document.querySelectorAll('section h2');
-  
-  // Variables para control del buscador
-  let isSearchOpen = false;
-  
-  // Abrir/cerrar buscador
-  searchIcon.addEventListener('click', () => {
-    if (!isSearchOpen) {
-      openSearch();
-    } else {
-      closeSearch();
-    }
-  });
-  
-  searchClose.addEventListener('click', closeSearch);
-  
-  // Función para abrir buscador
-  function openSearch() {
-    searchInput.classList.add('expanded');
-    searchInput.focus();
-    isSearchOpen = true;
-    searchClose.style.opacity = '1';
-  }
-  
-  // Función para cerrar buscador
-  function closeSearch() {
-    searchInput.classList.remove('expanded');
-    searchInput.value = '';
-    searchResults.classList.remove('active');
-    searchResults.innerHTML = '';
-    isSearchOpen = false;
-    searchClose.style.opacity = '0';
-  }
-  
-  // Buscar mientras se escribe
-  searchInput.addEventListener('input', performSearch);
-  
-  // Función de búsqueda
-  function performSearch() {
-    const query = searchInput.value.trim().toLowerCase();
-    
-    if (query.length === 0) {
-      searchResults.classList.remove('active');
-      searchResults.innerHTML = '';
-      return;
-    }
-    
-    const results = [];
-    
-    // Buscar en videos
-    videoCards.forEach(card => {
-      const title = card.getAttribute('data-title').toLowerCase();
-      const description = card.getAttribute('data-description').toLowerCase();
-      const category = card.getAttribute('data-category');
       
-      if (title.includes(query) || description.includes(query)) {
-        results.push({
-          element: card,
-          title: card.getAttribute('data-title'),
-          description: card.getAttribute('data-description'),
-          category: 'Scripting',
-          type: 'video',
-          icon: 'fas fa-play-circle'
-        });
-      }
-    });
-    
-    // Buscar en modeling cards
-    modelingCards.forEach(card => {
-      const title = card.getAttribute('data-title').toLowerCase();
-      const description = card.getAttribute('data-description').toLowerCase();
-      const category = card.getAttribute('data-category');
+      <div class="nav-menu">
+        <a href="#about" class="nav-link active">
+          <i class="fas fa-user"></i>
+          <span>About</span>
+        </a>
+        <a href="#skills" class="nav-link">
+          <i class="fas fa-code"></i>
+          <span>Skills</span>
+        </a>
+        <a href="#experience" class="nav-link">
+          <i class="fas fa-briefcase"></i>
+          <span>Experience</span>
+        </a>
+        <a href="#contact" class="nav-link">
+          <i class="fas fa-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </div>
       
-      if (title.includes(query) || description.includes(query)) {
-        results.push({
-          element: card,
-          title: card.getAttribute('data-title'),
-          description: card.getAttribute('data-description'),
-          category: 'Modeling',
-          type: 'modeling',
-          icon: 'fas fa-cube'
-        });
-      }
-    });
-    
-    // Buscar en secciones
-    sectionHeadings.forEach(heading => {
-      const text = heading.textContent.toLowerCase();
-      if (text.includes(query)) {
-        const section = heading.closest('section');
-        results.push({
-          element: section,
-          title: heading.textContent,
-          description: `Jump to ${heading.textContent} section`,
-          category: 'Section',
-          type: 'section',
-          icon: 'fas fa-hashtag'
-        });
-      }
-    });
-    
-    // Mostrar resultados
-    displaySearchResults(results, query);
-  }
-  
-  // Mostrar resultados en el dropdown
-  function displaySearchResults(results, query) {
-    if (results.length === 0) {
-      searchResults.innerHTML = `
-        <div class="no-results">
-          <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i>
-          <div>No results found for "${query}"</div>
-          <small style="opacity: 0.7; margin-top: 5px;">Try different keywords</small>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+      
+      <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fas fa-star"></i>
+          Senior Lua Developer
         </div>
-      `;
-      searchResults.classList.add('active');
-      return;
-    }
-    
-    let html = '';
-    
-    results.forEach((result, index) => {
-      html += `
-        <div class="search-result-item" data-index="${index}">
-          <i class="${result.icon}"></i>
-          <div>
-            <div class="search-result-title">${highlightText(result.title, query)}</div>
-            <div class="search-result-description">${highlightText(result.description.substring(0, 80), query)}${result.description.length > 80 ? '...' : ''}</div>
-            <div class="search-result-category">${result.category}</div>
+        
+        <h1 class="hero-title">
+          Crafting <span class="text-gradient">Exceptional</span>
+          <br>Game Experiences
+        </h1>
+        
+        <p class="hero-subtitle">
+          I specialize in high-performance Lua scripting, scalable game architecture,
+          and creating immersive gaming experiences that engage millions of players.
+        </p>
+        
+        <div class="hero-actions">
+          <a href="#experience" class="btn btn-primary">
+            <i class="fas fa-rocket"></i>
+            View My Work
+          </a>
+          <a href="#contact" class="btn btn-ghost">
+            <i class="fas fa-paper-plane"></i>
+            Get In Touch
+          </a>
+        </div>
+        
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number" data-count="50">0</span>
+            <span class="stat-label">Projects</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-count="3">0</span>
+            <span class="stat-label">Years Exp</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-count="100">0</span>
+            <span class="stat-label">% Client Sat</span>
           </div>
         </div>
-      `;
-    });
+      </div>
+      
+      <div class="hero-visual">
+        <div class="code-window">
+          <div class="code-header">
+            <div class="code-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <div class="code-title">main.lua</div>
+          </div>
+          <div class="code-content">
+            <pre><code class="language-lua">-- Advanced Movement System
+local MovementSystem = {}
+MovementSystem.__index = MovementSystem
+
+function MovementSystem.new(character)
+    local self = setmetatable({}, MovementSystem)
+    self.character = character
+    self.velocity = Vector3.new()
+    self.isGrounded = true
+    self.jumpCount = 0
     
-    searchResults.innerHTML = html;
-    searchResults.classList.add('active');
-    
-    // Añadir event listeners a los resultados
-    document.querySelectorAll('.search-result-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const index = item.getAttribute('data-index');
-        const result = results[index];
+    return self
+end
+
+function MovementSystem:update(deltaTime)
+    local input = self:getInput()
+    self:applyPhysics(input, deltaTime)
+    self:handleCollisions()
+    self:updateAnimation()
+end
+
+-- Professional Lua development
+-- Clean, optimized, scalable code</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about" id="about">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="text-gradient">About</span> Me
+          </h2>
+          <p class="section-subtitle">
+            Senior Lua Developer with passion for game architecture
+          </p>
+        </div>
         
-        if (result.type === 'video') {
-          // Simular click en el video card
-          result.element.click();
-        } else if (result.type === 'section') {
-          // Scroll a la sección
-          result.element.scrollIntoView({ behavior: 'smooth' });
-        } else if (result.type === 'modeling') {
-          // Scroll a la card de modeling
-          result.element.scrollIntoView({ behavior: 'smooth' });
-          // Efecto visual
-          result.element.style.boxShadow = '0 0 0 2px rgba(255,255,255,0.3)';
-          setTimeout(() => {
-            result.element.style.boxShadow = '';
-          }, 2000);
-        }
+        <div class="about-grid">
+          <div class="about-image">
+            <div class="image-container">
+              <img src="images/profile.png" alt="st1yler" class="profile-image">
+              <div class="image-glow"></div>
+              <div class="image-badge">
+                <i class="fas fa-check-circle"></i>
+                Available for Work
+              </div>
+            </div>
+          </div>
+          
+          <div class="about-content">
+            <h3 class="about-name">st1yler</h3>
+            <div class="about-title">Senior Lua & Game Developer</div>
+            
+            <div class="about-description">
+              <p>
+                With over 3 years of professional experience, I specialize in creating
+                high-performance game systems using Lua. My expertise spans from
+                complex game mechanics to scalable backend architectures.
+              </p>
+              <p>
+                I believe in writing clean, maintainable code and following best
+                practices. My work focuses on creating engaging experiences that
+                are both technically excellent and commercially successful.
+              </p>
+            </div>
+            
+            <div class="about-info">
+              <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                  <span class="info-label">Location</span>
+                  <span class="info-value">Remote Worldwide</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                  <span class="info-label">Experience</span>
+                  <span class="info-value">3+ Years</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-briefcase"></i>
+                <div>
+                  <span class="info-label">Availability</span>
+                  <span class="info-value">Open to Projects</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="languages">
+              <h4 class="languages-title">Languages</h4>
+              <div class="language-progress">
+                <div class="language-item">
+                  <span class="language-name">English</span>
+                  <div class="language-bar">
+                    <div class="language-fill" style="width: 95%"></div>
+                  </div>
+                  <span class="language-level">Fluent</span>
+                </div>
+                <div class="language-item">
+                  <span class="language-name">Spanish</span>
+                  <div class="language-bar">
+                    <div class="language-fill" style="width: 100%"></div>
+                  </div>
+                  <span class="language-level">Native</span>
+                </div>
+                <div class="language-item">
+                  <span class="language-name">Portuguese</span>
+                  <div class="language-bar">
+                    <div class="language-fill" style="width: 70%"></div>
+                  </div>
+                  <span class="language-level">Intermediate</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section skills" id="skills">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">
+            Technical <span class="text-gradient">Expertise</span>
+          </h2>
+          <p class="section-subtitle">
+            Core competencies and technologies I master
+          </p>
+        </div>
         
-        closeSearch();
-      });
-    });
-  }
-  
-  // Resaltar texto en los resultados
-  function highlightText(text, query) {
-    if (!query) return text;
-    
-    const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<span style="color: #fff; background: rgba(255,255,255,0.1); padding: 0 2px; border-radius: 2px;">$1</span>');
-  }
-  
-  // Cerrar buscador al hacer clic fuera
-  document.addEventListener('click', (e) => {
-    if (!searchContainer.contains(e.target) && isSearchOpen) {
-      closeSearch();
-    }
-  });
-  
-  // Cerrar con ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isSearchOpen) {
-      closeSearch();
-    }
-  });
-  
-  // Código original para modales de video e imágenes (mantenido)
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImage');
-  const closeBtn = document.getElementById('closeModal');
-  const videoModal = document.getElementById('videoModal');
-  const expandedVideo = document.getElementById('expandedVideo');
-  const closeVideoModal = document.getElementById('closeVideoModal');
-  const minimizeVideo = document.getElementById('minimizeVideo');
-  const fullscreenVideo = document.getElementById('fullscreenVideo');
-  const videoModalTitle = document.getElementById('videoModalTitle');
-  let scrollTimer;
-  let isFullscreen = false;
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon">
+              <i class="devicon-lua-plain"></i>
+            </div>
+            <h3 class="skill-title">Lua Development</h3>
+            <p class="skill-description">
+              Advanced scripting, game mechanics, and system architecture
+            </p>
+            <div class="skill-tags">
+              <span class="tag">Roblox API</span>
+              <span class="tag">Coroutines</span>
+              <span class="tag">Metatables</span>
+            </div>
+          </div>
+          
+          <div class="skill-card">
+            <div class="skill-icon">
+              <i class="fas fa-server"></i>
+            </div>
+            <h3 class="skill-title">Backend Systems</h3>
+            <p class="skill-description">
+              Scalable architecture, databases, and network programming
+            </p>
+            <div class="skill-tags">
+              <span class="tag">Datastore</span>
+              <span class="tag">Redis</span>
+              <span class="tag">Web APIs</span>
+            </div>
+          </div>
+          
+          <div class="skill-card">
+            <div class="skill-icon">
+              <i class="fas fa-gamepad"></i>
+            </div>
+            <h3 class="skill-title">Game Design</h3>
+            <p class="skill-description">
+              Player psychology, mechanics design, and monetization
+            </p>
+            <div class="skill-tags">
+              <span class="tag">Game Balance</span>
+              <span class="tag">Progression</span>
+              <span class="tag">Monetization</span>
+            </div>
+          </div>
+          
+          <div class="skill-card">
+            <div class="skill-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="skill-title">Performance</h3>
+            <p class="skill-description">
+              Optimization, memory management, and efficient algorithms
+            </p>
+            <div class="skill-tags">
+              <span class="tag">Profiling</span>
+              <span class="tag">Memory Opt</span>
+              <span class="tag">Algorithms</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tech-stack">
+          <h3 class="tech-title">Technology Stack</h3>
+          <div class="tech-icons">
+            <div class="tech-icon" title="Lua">
+              <i class="devicon-lua-plain"></i>
+              <span>Lua</span>
+            </div>
+            <div class="tech-icon" title="Git">
+              <i class="devicon-git-plain"></i>
+              <span>Git</span>
+            </div>
+            <div class="tech-icon" title="VS Code">
+              <i class="devicon-vscode-plain"></i>
+              <span>VS Code</span>
+            </div>
+            <div class="tech-icon" title="Rojo">
+              <i class="fas fa-toolbox"></i>
+              <span>Rojo</span>
+            </div>
+            <div class="tech-icon" title="Blender">
+              <i class="devicon-blender-plain"></i>
+              <span>Blender</span>
+            </div>
+            <div class="tech-icon" title="GitHub">
+              <i class="devicon-github-plain"></i>
+              <span>GitHub</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  // Configurar videos en grid
-  videoCards.forEach(card => {
-    const videoId = card.getAttribute('data-video-id');
-    const title = card.getAttribute('data-title');
-    const iframe = card.querySelector('iframe');
-    
-    // Configurar el thumbnail (sin autoplay, solo fondo)
-    iframe.src = `https://player.vimeo.com/video/${videoId}?background=1&autoplay=0&loop=1&byline=0&title=0&muted=1`;
-    
-    // Evento para abrir video en modal
-    card.addEventListener('click', () => {
-      // Actualizar título en la barra
-      videoModalTitle.textContent = title;
+    <!-- Experience Section -->
+    <section class="section experience" id="experience">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">
+            My <span class="text-gradient">Work</span>
+          </h2>
+          <p class="section-subtitle">
+            Professional projects and contributions
+          </p>
+        </div>
+        
+        <div class="experience-grid">
+          <div class="experience-card featured">
+            <div class="experience-header">
+              <div class="experience-icon">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="experience-badge">Featured</div>
+            </div>
+            <h3 class="experience-title">Lua Portfolio</h3>
+            <p class="experience-description">
+              Collection of advanced Lua projects showcasing game systems,
+              architecture patterns, and professional development workflows.
+            </p>
+            <div class="experience-tags">
+              <span class="tag">Lua</span>
+              <span class="tag">Game Systems</span>
+              <span class="tag">Architecture</span>
+            </div>
+            <a href="Lua/Lua.html" class="experience-link">
+              View Portfolio
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          
+          <div class="experience-card">
+            <div class="experience-header">
+              <div class="experience-icon">
+                <i class="fas fa-cube"></i>
+              </div>
+            </div>
+            <h3 class="experience-title">3D Modeling</h3>
+            <p class="experience-description">
+              High-quality 3D assets and environments for games,
+              focusing on optimization and visual quality.
+            </p>
+            <div class="experience-tags">
+              <span class="tag">Blender</span>
+              <span class="tag">3D Modeling</span>
+              <span class="tag">Texturing</span>
+            </div>
+          </div>
+          
+          <div class="experience-card">
+            <div class="experience-header">
+              <div class="experience-icon">
+                <i class="fas fa-users"></i>
+              </div>
+            </div>
+            <h3 class="experience-title">Team Projects</h3>
+            <p class="experience-description">
+              Collaborative development on large-scale game projects
+              with distributed teams and agile methodologies.
+            </p>
+            <div class="experience-tags">
+              <span class="tag">Teamwork</span>
+              <span class="tag">Agile</span>
+              <span class="tag">Git</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">
+            Let's <span class="text-gradient">Connect</span>
+          </h2>
+          <p class="section-subtitle">
+            Ready to bring your project to life
+          </p>
+        </div>
+        
+        <div class="contact-grid">
+          <div class="contact-info">
+            <h3 class="contact-title">Get in Touch</h3>
+            <p class="contact-description">
+              Interested in working together? Feel free to reach out
+              for project inquiries or collaboration opportunities.
+            </p>
+            
+            <div class="contact-details">
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <div>
+                  <div class="contact-label">Email</div>
+                  <a href="mailto:contact@st1yler.dev" class="contact-value">
+                    contact@st1yler.dev
+                  </a>
+                </div>
+              </div>
+              
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                  <div class="contact-label">Response Time</div>
+                  <div class="contact-value">Within 24 hours</div>
+                </div>
+              </div>
+              
+              <div class="contact-item">
+                <div class="contact-icon">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <div>
+                  <div class="contact-label">Timezone</div>
+                  <div class="contact-value">GMT-5 / EST</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="social-profiles">
+            <h3 class="social-title">Find Me Online</h3>
+            <div class="social-grid">
+              <a href="https://github.com/st1yler" target="_blank" class="social-card">
+                <div class="social-icon">
+                  <i class="fab fa-github"></i>
+                </div>
+                <div class="social-info">
+                  <div class="social-name">GitHub</div>
+                  <div class="social-handle">@st1yler</div>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+              
+              <a href="https://linkedin.com/in/st1yler" target="_blank" class="social-card">
+                <div class="social-icon">
+                  <i class="fab fa-linkedin"></i>
+                </div>
+                <div class="social-info">
+                  <div class="social-name">LinkedIn</div>
+                  <div class="social-handle">st1yler</div>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+              
+              <a href="https://discord.com/users/1044626710_w" target="_blank" class="social-card">
+                <div class="social-icon">
+                  <i class="fab fa-discord"></i>
+                </div>
+                <div class="social-info">
+                  <div class="social-name">Discord</div>
+                  <div class="social-handle">st1yler</div>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+              
+              <a href="https://youtube.com/@st1yler" target="_blank" class="social-card">
+                <div class="social-icon">
+                  <i class="fab fa-youtube"></i>
+                </div>
+                <div class="social-info">
+                  <div class="social-name">YouTube</div>
+                  <div class="social-handle">@st1yler</div>
+                </div>
+                <i class="fas fa-external-link-alt social-arrow"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">st1yler</div>
+          <p class="footer-tagline">
+            Senior Lua Developer specializing in game architecture
+          </p>
+        </div>
+        
+        <div class="footer-links">
+          <a href="#about" class="footer-link">About</a>
+          <a href="#skills" class="footer-link">Skills</a>
+          <a href="#experience" class="footer-link">Work</a>
+          <a href="#contact" class="footer-link">Contact</a>
+          <a href="Lua/Lua.html" class="footer-link">Lua Portfolio</a>
+        </div>
+        
+        <div class="footer-social">
+          <a href="https://github.com/st1yler" target="_blank" class="social-link">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://linkedin.com/in/st1yler" target="_blank" class="social-link">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="https://discord.com/users/1044626710_w" target="_blank" class="social-link">
+            <i class="fab fa-discord"></i>
+          </a>
+          <a href="mailto:contact@st1yler.dev" class="social-link">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
       
-      // Configurar URL del video para modal (con controles)
-      expandedVideo.src = `https://player.vimeo.com/video/${videoId}?autoplay=1&title=0&byline=0&portrait=0&badge=0`;
-      
-      // Mostrar modal
-      videoModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      
-      // Enfocar el modal para que ESC funcione
-      videoModal.focus();
-    });
-  });
+      <div class="footer-bottom">
+        <p class="copyright">
+          © 2026 st1yler. All rights reserved.
+          <span class="separator">|</span>
+          Crafted with <i class="fas fa-heart"></i> and Lua
+        </p>
+      </div>
+    </div>
+  </footer>
 
-  // Cerrar modal de video
-  closeVideoModal.addEventListener('click', () => {
-    closeVideoModalFunction();
-  });
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 
-  // Función para cerrar modal
-  function closeVideoModalFunction() {
-    videoModal.classList.remove('active');
-    document.body.style.overflow = '';
-    
-    // Pausar video al cerrar
-    expandedVideo.src = '';
-    isFullscreen = false;
-    document.exitFullscreen?.();
-  }
-
-  // Minimizar (hacer pequeña la ventana)
-  minimizeVideo.addEventListener('click', () => {
-    const macWindow = document.querySelector('.mac-video-window');
-    macWindow.style.transform = 'scale(0.7)';
-    macWindow.style.opacity = '0.8';
-    
-    // Restaurar después de un tiempo
-    setTimeout(() => {
-      macWindow.style.transform = 'scale(1)';
-      macWindow.style.opacity = '1';
-    }, 300);
-  });
-
-  // Fullscreen (alternar pantalla completa)
-  fullscreenVideo.addEventListener('click', () => {
-    const macWindow = document.querySelector('.mac-video-window');
-    
-    if (!isFullscreen) {
-      if (macWindow.requestFullscreen) {
-        macWindow.requestFullscreen();
-      } else if (macWindow.webkitRequestFullscreen) {
-        macWindow.webkitRequestFullscreen();
-      } else if (macWindow.msRequestFullscreen) {
-        macWindow.msRequestFullscreen();
-      }
-      isFullscreen = true;
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-      isFullscreen = false;
-    }
-  });
-
-  // Detectar cambios en fullscreen
-  document.addEventListener('fullscreenchange', () => {
-    isFullscreen = !!document.fullscreenElement;
-  });
-
-  // Cerrar modal al hacer clic fuera
-  videoModal.addEventListener('click', (e) => {
-    if (e.target === videoModal) {
-      closeVideoModalFunction();
-    }
-  });
-
-  // Cerrar modales con ESC
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (videoModal.classList.contains('active')) {
-        closeVideoModalFunction();
-      }
-      if (modal.classList.contains('active')) {
-        closeModal();
-      }
-    }
-  });
-
-  // Función para cerrar modal de imágenes (existente)
-  function closeModal() {
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-    document.body.style.overflow = modal.dataset.prevOverflow || '';
-    modalImg.style.display = 'none';
-  }
-
-  // Event listeners para imágenes
-  document.querySelectorAll('section img, .hero img').forEach(img => {
-    img.style.cursor = 'zoom-in';
-    img.addEventListener('click', () => {
-      modalImg.src = img.src;
-      modalImg.style.display = 'block';
-      
-      modal.classList.add('active');
-      modal.setAttribute('aria-hidden', 'false');
-      modal.dataset.prevOverflow = document.body.style.overflow || '';
-      document.body.style.overflow = 'hidden';
-      document.body.classList.add('modal-open');
-      closeBtn.focus();
-    });
-  });
-
-  // Event listeners para cerrar modal de imágenes
-  closeBtn.addEventListener('click', closeModal);
-  closeBtn.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      closeModal();
-    }
-  });
-  
-  modal.addEventListener('click', e => {
-    if (e.target === modal) closeModal();
-  });
-
-  // Efecto de blur al hacer scroll
-  document.querySelectorAll('img, video').forEach(el => {
-    el.addEventListener('mouseenter', () => el.classList.add('hovered'));
-    el.addEventListener('mouseleave', () => el.classList.remove('hovered'));
-  });
-
-  window.addEventListener('scroll', () => {
-    if (document.body.classList.contains('modal-open') || videoModal.classList.contains('active')) return;
-    
-    document.querySelectorAll('img, video').forEach(el => {
-      if (el.classList.contains('hovered')) return;
-      if (el.tagName === 'VIDEO' && !el.paused) return;
-      el.style.filter = 'blur(2px)';
-    });
-    
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      document.querySelectorAll('img, video').forEach(el => {
-        el.style.filter = '';
-      });
-    }, 120);
-  });
-});
-</script>
-
+  <!-- JavaScript -->
+  <script src="js/script.js"></script>
 </body>
 </html>
