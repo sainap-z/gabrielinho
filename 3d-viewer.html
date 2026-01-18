@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Portfolio - st1yler</title>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <!-- GLTFLoader -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <!-- DRACOLoader (para modelos comprimidos) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.min.js"></script>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/3d-viewer.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --bg-dark: #0a0a0f;
+            --bg-card: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0d0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="logo">st1yler</span>
+                <span class="logo-badge">3D</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="index.html" class="nav-link active">
+                    <i class="fas fa-cube"></i> 3D Models
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-th-large"></i> Model Library</h2>
+                <p class="sidebar-subtitle">Browse 3D models by category</p>
+            </div>
+            
+            <div class="categories">
+                <div class="category active" data-category="all">
+                    <i class="fas fa-cubes"></i>
+                    <span>All Models</span>
+                    <span class="model-count" id="count-all">0</span>
+                </div>
+                
+                <div class="category" data-category="b">
+                    <i class="fas fa-building"></i>
+                    <span>Buildings</span>
+                    <span class="model-count" id="count-b">0</span>
+                </div>
+                
+                <div class="category" data-category="c">
+                    <i class="fas fa-car"></i>
+                    <span>Characters</span>
+                    <span class="model-count" id="count-c">0</span>
+                </div>
+                
+                <div class="category" data-category="p">
+                    <i class="fas fa-tree"></i>
+                    <span>Props</span>
+                    <span class="model-count" id="count-p">0</span>
+                </div>
+                
+                <div class="category" data-category="w">
+                    <i class="fas fa-gun"></i>
+                    <span>Weapons</span>
+                    <span class="model-count" id="count-w">0</span>
+                </div>
+            </div>
+            
+            <div class="model-list" id="modelList">
+                <!-- Models will be loaded here dynamically -->
+                <div class="loading-models">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Loading models...</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Click on a model to load it in the viewer. Use mouse to rotate, scroll to zoom.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Viewer Header -->
+            <div class="viewer-header">
+                <div class="viewer-title">
+                    <h1 id="modelTitle">3D Model Viewer</h1>
+                    <p id="modelDescription">Select a model from the sidebar to view it here</p>
+                </div>
+                
+                <div class="viewer-controls">
+                    <button class="control-btn" id="resetView">
+                        <i class="fas fa-crosshairs"></i>
+                        Reset View
+                    </button>
+                    <button class="control-btn" id="toggleWireframe">
+                        <i class="fas fa-th"></i>
+                        Wireframe
+                    </button>
+                    <button class="control-btn" id="toggleLights">
+                        <i class="fas fa-lightbulb"></i>
+                        Lights
+                    </button>
+                    <button class="control-btn" id="toggleGrid">
+                        <i class="fas fa-border-all"></i>
+                        Grid
+                    </button>
+                    <button class="control-btn" id="toggleAxes">
+                        <i class="fas fa-arrows-alt"></i>
+                        Axes
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3D Viewer Container -->
+            <div class="viewer-container">
+                <div id="loadingOverlay">
+                    <div class="loader">
+                        <div class="loader-spinner"></div>
+                        <div class="loader-text">Loading Model...</div>
+                    </div>
+                </div>
+                
+                <canvas id="modelCanvas"></canvas>
+                
+                <div class="viewer-stats">
+                    <div class="stat">
+                        <span class="stat-label">Vertices:</span>
+                        <span class="stat-value" id="vertexCount">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Faces:</span>
+                        <span class="stat-value" id="faceCount">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Scale:</span>
+                        <span class="stat-value" id="modelScale">1.0x</span>
+                    </div>
+                </div>
+                
+                <div class="viewer-controls-bottom">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="zoomIn">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="zoom-btn" id="zoomOut">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="rotation-controls">
+                        <button class="rotation-btn" id="rotateLeft">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <button class="rotation-btn" id="rotateRight">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Details -->
+            <div class="model-details" id="modelDetails">
+                <h3><i class="fas fa-info-circle"></i> Model Information</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">File Name:</span>
+                        <span class="detail-value" id="detailFileName">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Category:</span>
+                        <span class="detail-value" id="detailCategory">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Format:</span>
+                        <span class="detail-value" id="detailFormat">GLTF/GLB</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Textures:</span>
+                        <span class="detail-value" id="detailTextures">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Animations:</span>
+                        <span class="detail-value" id="detailAnimations">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Loaded:</span>
+                        <span class="detail-value" id="detailLoaded">-</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification System -->
+    <div id="notification" class="notification">
+        <span id="notificationText"></span>
+        <button id="closeNotification" class="close-notification">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/3d-viewer.js"></script>
+    
+    <script>
+        // Initialize the 3D viewer when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            init3DViewer();
+        });
+    </script>
+</body>
+</html>
