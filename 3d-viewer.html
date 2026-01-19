@@ -91,13 +91,13 @@
                 </div>
                 
                 <div class="category" data-category="c">
-                    <i class="fas fa-car"></i>
+                    <i class="fas fa-user"></i>
                     <span>Characters</span>
                     <span class="model-count" id="count-c">0</span>
                 </div>
                 
                 <div class="category" data-category="p">
-                    <i class="fas fa-tree"></i>
+                    <i class="fas fa-cube"></i>
                     <span>Props</span>
                     <span class="model-count" id="count-p">0</span>
                 </div>
@@ -135,25 +135,42 @@
                 </div>
                 
                 <div class="viewer-controls">
-                    <button class="control-btn" id="resetView">
+                    <button class="control-btn" id="resetView" title="Reset Camera View">
                         <i class="fas fa-crosshairs"></i>
                         Reset View
                     </button>
-                    <button class="control-btn" id="toggleWireframe">
+                    <button class="control-btn" id="toggleWireframe" title="Toggle Wireframe Mode">
                         <i class="fas fa-th"></i>
                         Wireframe
                     </button>
-                    <button class="control-btn" id="toggleLights">
+                    <button class="control-btn" id="toggleLights" title="Toggle Lights">
                         <i class="fas fa-lightbulb"></i>
                         Lights
                     </button>
-                    <button class="control-btn" id="toggleGrid">
+                    <button class="control-btn" id="toggleGrid" title="Toggle Grid">
                         <i class="fas fa-border-all"></i>
                         Grid
                     </button>
-                    <button class="control-btn" id="toggleAxes">
+                    <button class="control-btn" id="toggleAxes" title="Toggle Axes Helper">
                         <i class="fas fa-arrows-alt"></i>
                         Axes
+                    </button>
+                    <!-- Nuevos botones de escala -->
+                    <button class="control-btn" id="scaleUp" title="Scale Model Up">
+                        <i class="fas fa-search-plus"></i>
+                        Scale Up
+                    </button>
+                    <button class="control-btn" id="scaleDown" title="Scale Model Down">
+                        <i class="fas fa-search-minus"></i>
+                        Scale Down
+                    </button>
+                    <button class="control-btn" id="resetScale" title="Reset Scale to Original">
+                        <i class="fas fa-undo"></i>
+                        Reset Scale
+                    </button>
+                    <button class="control-btn" id="centerModel" title="Center Model in View">
+                        <i class="fas fa-bullseye"></i>
+                        Center Model
                     </button>
                 </div>
             </div>
@@ -186,19 +203,19 @@
                 
                 <div class="viewer-controls-bottom">
                     <div class="zoom-controls">
-                        <button class="zoom-btn" id="zoomIn">
+                        <button class="zoom-btn" id="zoomIn" title="Zoom In">
                             <i class="fas fa-search-plus"></i>
                         </button>
-                        <button class="zoom-btn" id="zoomOut">
+                        <button class="zoom-btn" id="zoomOut" title="Zoom Out">
                             <i class="fas fa-search-minus"></i>
                         </button>
                     </div>
                     
                     <div class="rotation-controls">
-                        <button class="rotation-btn" id="rotateLeft">
+                        <button class="rotation-btn" id="rotateLeft" title="Rotate Left">
                             <i class="fas fa-undo"></i>
                         </button>
-                        <button class="rotation-btn" id="rotateRight">
+                        <button class="rotation-btn" id="rotateRight" title="Rotate Right">
                             <i class="fas fa-redo"></i>
                         </button>
                     </div>
