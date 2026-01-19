@@ -27,7 +27,7 @@ const modelsDatabase = [
         fileName: "static/models/buildings/japanese_house.glb",
         thumbnail: "static/modeling/Japanese/japanese1.png",
         scale: 0.8,
-        position: { x: 0, y: -0.5, z: 0 },
+        position: { x: 0, y: 0, z: 0 },
         rotation: { x: 0, y: Math.PI/4, z: 0 }
     },
     {
@@ -38,7 +38,7 @@ const modelsDatabase = [
         fileName: "static/models/characters/scifi_character.glb",
         thumbnail: "static/modeling/bundles/bundle1.png",
         scale: 1.2,
-        position: { x: 0, y: -1, z: 0 },
+        position: { x: 0, y: 0, z: 0 },
         rotation: { x: 0, y: 0, z: 0 }
     },
     {
@@ -49,7 +49,7 @@ const modelsDatabase = [
         fileName: "static/models/characters/warrior.glb",
         thumbnail: "static/modeling/bundles/bundle2.png",
         scale: 1.0,
-        position: { x: 0, y: -0.8, z: 0 },
+        position: { x: 0, y: 0, z: 0 },
         rotation: { x: 0, y: Math.PI/2, z: 0 }
     },
     {
@@ -259,10 +259,35 @@ function loadModel(modelData) {
         (gltf) => {
             model = gltf.scene;
             
-            // Scale and position
+            // Apply initial scale and position from modelData
             model.scale.set(modelData.scale, modelData.scale, modelData.scale);
             model.position.set(modelData.position.x, modelData.position.y, modelData.position.z);
             model.rotation.set(modelData.rotation.x, modelData.rotation.y, modelData.rotation.z);
+            
+            // Calculate bounding box for auto-scaling
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            
+            // Auto-scale if model is too large
+            const maxSize = 8; // Maximum size in any dimension
+            const maxDim = Math.max(size.x, size.y, size.z);
+            let autoScale = 1.0;
+            
+            if (maxDim > maxSize) {
+                autoScale = maxSize / maxDim;
+                console.log(`Auto-scaling model from ${maxDim.toFixed(2)} to ${(maxDim * autoScale).toFixed(2)} (scale: ${autoScale.toFixed(3)}x)`);
+                model.scale.multiplyScalar(autoScale);
+                
+                // Update displayed scale
+                document.getElementById('modelScale').textContent = `${(modelData.scale * autoScale).toFixed(2)}x (auto-scaled)`;
+            } else {
+                document.getElementById('modelScale').textContent = `${modelData.scale}x`;
+            }
+            
+            // Center the model by moving it to origin
+            // First, we need to adjust position after scaling
+            model.position.sub(center.multiplyScalar(modelData.scale * autoScale));
             
             // Enable shadows
             model.traverse((child) => {
@@ -279,7 +304,7 @@ function loadModel(modelData) {
             
             scene.add(model);
             
-            // Calculate stats
+            // Calculate stats (after scaling)
             let vertices = 0;
             let faces = 0;
             
@@ -292,22 +317,43 @@ function loadModel(modelData) {
             
             document.getElementById('vertexCount').textContent = vertices.toLocaleString();
             document.getElementById('faceCount').textContent = faces.toLocaleString();
-            document.getElementById('modelScale').textContent = `${modelData.scale}x`;
             
-            // Focus camera on model
-            const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
+            // Recalculate bounding box after all transformations
+            const finalBox = new THREE.Box3().setFromObject(model);
+            const finalCenter = finalBox.getCenter(new THREE.Vector3());
+            const finalSize = finalBox.getSize(new THREE.Vector3());
             
-            const maxDim = Math.max(size.x, size.y, size.z);
+            // Focus camera on model with proper distance
+            const finalMaxDim = Math.max(finalSize.x, finalSize.y, finalSize.z);
             const fov = camera.fov * (Math.PI / 180);
-            let cameraZ = Math.abs(maxDim / Math.tan(fov / 2));
             
-            camera.position.copy(center);
-            camera.position.z += cameraZ * 1.5;
-            camera.lookAt(center);
-            controls.target.copy(center);
+            // Calculate ideal camera distance based on model size
+            let cameraDistance = 0;
+            if (finalMaxDim > 0) {
+                // Distance formula to fit model in view
+                cameraDistance = (finalMaxDim / 2) / Math.tan(fov / 2);
+                
+                // Add some padding (1.5x)
+                cameraDistance *= 1.5;
+                
+                // Clamp distance to reasonable values
+                cameraDistance = Math.max(cameraDistance, 3);
+                cameraDistance = Math.min(cameraDistance, 20);
+            } else {
+                cameraDistance = 5; // Default distance
+            }
+            
+            // Position camera
+            camera.position.set(cameraDistance, cameraDistance * 0.5, cameraDistance);
+            camera.lookAt(finalCenter);
+            controls.target.copy(finalCenter);
             controls.update();
+            
+            // Log model info
+            console.log(`Model loaded: ${modelData.name}`);
+            console.log(`  Size: ${finalSize.x.toFixed(2)} x ${finalSize.y.toFixed(2)} x ${finalSize.z.toFixed(2)}`);
+            console.log(`  Center: ${finalCenter.x.toFixed(2)}, ${finalCenter.y.toFixed(2)}, ${finalCenter.z.toFixed(2)}`);
+            console.log(`  Camera distance: ${cameraDistance.toFixed(2)}`);
             
             showLoading(false);
             showNotification(`Loaded: ${modelData.name}`);
@@ -338,6 +384,15 @@ function loadModel(modelData) {
             });
             model = new THREE.Mesh(geometry, material);
             scene.add(model);
+            
+            // Auto-center the placeholder
+            model.position.set(0, 0, 0);
+            
+            // Focus camera on placeholder
+            camera.position.set(5, 3, 5);
+            camera.lookAt(0, 0, 0);
+            controls.target.set(0, 0, 0);
+            controls.update();
         }
     );
 }
@@ -383,9 +438,33 @@ function setupEventListeners() {
     
     // Control buttons
     document.getElementById('resetView').addEventListener('click', () => {
-        camera.position.set(5, 3, 5);
-        controls.target.set(0, 0, 0);
-        controls.update();
+        if (model) {
+            // Calculate model center
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const fov = camera.fov * (Math.PI / 180);
+            
+            // Calculate ideal camera distance
+            let cameraDistance = (maxDim / 2) / Math.tan(fov / 2) * 1.5;
+            cameraDistance = Math.max(cameraDistance, 3);
+            cameraDistance = Math.min(cameraDistance, 20);
+            
+            // Reset camera to ideal position
+            camera.position.set(cameraDistance, cameraDistance * 0.5, cameraDistance);
+            camera.lookAt(center);
+            controls.target.copy(center);
+            controls.update();
+            
+            showNotification("View reset to model center");
+        } else {
+            // Default reset if no model
+            camera.position.set(5, 3, 5);
+            controls.target.set(0, 0, 0);
+            controls.update();
+            showNotification("View reset");
+        }
     });
     
     document.getElementById('toggleWireframe').addEventListener('click', () => {
@@ -452,10 +531,73 @@ function setupEventListeners() {
         }
     });
     
+    // Manual scale adjustment buttons (nuevos controles)
+    document.getElementById('scaleUp').addEventListener('click', () => {
+        if (model) {
+            model.scale.multiplyScalar(1.2);
+            updateModelScaleDisplay();
+            showNotification("Model scaled up");
+        }
+    });
+    
+    document.getElementById('scaleDown').addEventListener('click', () => {
+        if (model) {
+            model.scale.multiplyScalar(0.8);
+            updateModelScaleDisplay();
+            showNotification("Model scaled down");
+        }
+    });
+    
+    document.getElementById('resetScale').addEventListener('click', () => {
+        if (model) {
+            // Find original model data
+            const modelId = parseInt(document.querySelector('.model-card.active')?.dataset.id || '0');
+            const modelData = modelsDatabase.find(m => m.id === modelId);
+            
+            if (modelData) {
+                // Reset to original scale
+                model.scale.set(modelData.scale, modelData.scale, modelData.scale);
+                updateModelScaleDisplay();
+                showNotification("Scale reset to original");
+            }
+        }
+    });
+    
+    // Center model button (nuevo control)
+    document.getElementById('centerModel').addEventListener('click', () => {
+        if (model) {
+            const box = new THREE.Box3().setFromObject(model);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            // Move model to center
+            model.position.sub(center);
+            
+            // Update camera to look at new center
+            controls.target.set(0, 0, 0);
+            controls.update();
+            
+            showNotification("Model centered");
+        }
+    });
+    
     // Close notification
     document.getElementById('closeNotification').addEventListener('click', () => {
         document.getElementById('notification').style.display = 'none';
     });
+}
+
+function updateModelScaleDisplay() {
+    if (model) {
+        // Get current scale (assuming uniform scaling)
+        const currentScale = model.scale.x;
+        const modelId = parseInt(document.querySelector('.model-card.active')?.dataset.id || '0');
+        const modelData = modelsDatabase.find(m => m.id === modelId);
+        
+        if (modelData) {
+            document.getElementById('modelScale').textContent = `${currentScale.toFixed(2)}x`;
+        }
+    }
 }
 
 function onWindowResize() {
