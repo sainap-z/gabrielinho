@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>st1yler | Senior Lua Developer</title>
+  <title>Gabriel | Full Stack Developer</title>
   
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="css/components.css">
   
   <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230e0e0e'/%3E%3Ctext x='50' y='68' font-family='Inter,Arial' font-size='56' fill='%23ffffff' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230e0e0e'/%3E%3Ctext x='50' y='68' font-family='Inter,Arial' font-size='56' fill='%23ffffff' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E" type="image/svg+xml">
   <meta name="theme-color" content="#000000">
 </head>
 
@@ -37,7 +37,7 @@
   <nav class="nav">
     <div class="nav-container">
       <div class="nav-logo">
-        <span class="logo-text">st1yler</span>
+        <span class="logo-text">Gabriel</span>
         <span class="logo-badge">DEV</span>
       </div>
       
@@ -52,7 +52,7 @@
         </a>
         <a href="#experience" class="nav-link">
           <i class="fas fa-briefcase"></i>
-          <span>Experience</span>
+          <span>Projects</span>
         </a>
         <a href="#contact" class="nav-link">
           <i class="fas fa-envelope"></i>
@@ -79,23 +79,23 @@
       <div class="hero-content">
         <div class="hero-badge">
           <i class="fas fa-star"></i>
-          Senior Lua Developer
+          Full Stack Developer
         </div>
         
         <h1 class="hero-title">
-          Crafting <span class="text-gradient">Exceptional</span>
-          <br>Game Experiences
+          Building <span class="text-gradient">Scalable</span>
+          <br>Digital Solutions
         </h1>
         
         <p class="hero-subtitle">
-          I specialize in high-performance Lua scripting, scalable game architecture,
-          and creating immersive gaming experiences that engage millions of players.
+          I specialize in modern web development, creating responsive applications,
+          and architecting robust backend systems with cutting-edge technologies.
         </p>
         
         <div class="hero-actions">
           <a href="#experience" class="btn btn-primary">
             <i class="fas fa-rocket"></i>
-            View My Work
+            View Projects
           </a>
           <a href="#contact" class="btn btn-ghost">
             <i class="fas fa-paper-plane"></i>
@@ -105,11 +105,11 @@
         
         <div class="hero-stats">
           <div class="stat">
-            <span class="stat-number" data-count="50">0</span>
+            <span class="stat-number" data-count="30">0</span>
             <span class="stat-label">Projects</span>
           </div>
           <div class="stat">
-            <span class="stat-number" data-count="3">0</span>
+            <span class="stat-number" data-count="4">0</span>
             <span class="stat-label">Years Exp</span>
           </div>
           <div class="stat">
@@ -127,32 +127,42 @@
               <span class="dot yellow"></span>
               <span class="dot green"></span>
             </div>
-            <div class="code-title">main.lua</div>
+            <div class="code-title">server.js</div>
           </div>
           <div class="code-content">
-            <pre><code class="language-lua">-- Advanced Movement System
-local MovementSystem = {}
-MovementSystem.__index = MovementSystem
+            <pre><code class="language-javascript">// Full Stack Application
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
 
-function MovementSystem.new(character)
-    local self = setmetatable({}, MovementSystem)
-    self.character = character
-    self.velocity = Vector3.new()
-    self.isGrounded = true
-    self.jumpCount = 0
-    
-    return self
-end
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
-function MovementSystem:update(deltaTime)
-    local input = self:getInput()
-    self:applyPhysics(input, deltaTime)
-    self:handleCollisions()
-    self:updateAnimation()
-end
+// API Routes
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
--- Professional Lua development
--- Clean, optimized, scalable code</code></pre>
+// Real-time WebSocket
+const io = require('socket.io')(server);
+io.on('connection', (socket) => {
+  console.log('New client connected');
+  
+  socket.on('message', (data) => {
+    io.emit('message', data);
+  });
+});
+
+// Professional full stack development
+// Clean, scalable, and maintainable code</code></pre>
           </div>
         </div>
       </div>
@@ -166,14 +176,14 @@ end
             <span class="text-gradient">About</span> Me
           </h2>
           <p class="section-subtitle">
-            Senior Lua Developer with passion for game architecture
+            Full Stack Developer with passion for modern web technologies
           </p>
         </div>
         
         <div class="about-grid">
           <div class="about-image">
             <div class="image-container">
-              <img src="images/profile.png" alt="st1yler" class="profile-image">
+              <img src="images/profile.png" alt="Gabriel" class="profile-image">
               <div class="image-glow"></div>
               <div class="image-badge">
                 <i class="fas fa-check-circle"></i>
@@ -183,18 +193,18 @@ end
           </div>
           
           <div class="about-content">
-            <h3 class="about-name">st1yler</h3>
-            <div class="about-title">Senior Lua & Game Developer</div>
+            <h3 class="about-name">Gabriel</h3>
+            <div class="about-title">Full Stack & Web Developer</div>
             
             <div class="about-description">
               <p>
-                With over 3 years of professional experience, I specialize in creating
-                high-performance game systems using Lua. My expertise spans from
-                complex game mechanics to scalable backend architectures.
+                With over 4 years of professional experience, I specialize in building
+                modern web applications using JavaScript, React, Node.js, and cloud technologies.
+                My expertise spans from frontend UI/UX to scalable backend architectures.
               </p>
               <p>
                 I believe in writing clean, maintainable code and following best
-                practices. My work focuses on creating engaging experiences that
+                practices. My work focuses on creating engaging digital experiences that
                 are both technically excellent and commercially successful.
               </p>
             </div>
@@ -211,7 +221,7 @@ end
                 <i class="fas fa-calendar-alt"></i>
                 <div>
                   <span class="info-label">Experience</span>
-                  <span class="info-value">3+ Years</span>
+                  <span class="info-value">4+ Years</span>
                 </div>
               </div>
               <div class="info-item">
@@ -269,16 +279,16 @@ end
         <div class="skills-grid">
           <div class="skill-card">
             <div class="skill-icon">
-              <i class="devicon-lua-plain"></i>
+              <i class="fab fa-js-square"></i>
             </div>
-            <h3 class="skill-title">Lua Development</h3>
+            <h3 class="skill-title">Frontend Development</h3>
             <p class="skill-description">
-              Advanced scripting, game mechanics, and system architecture
+              Modern JavaScript frameworks, responsive design, and interactive UIs
             </p>
             <div class="skill-tags">
-              <span class="tag">Roblox API</span>
-              <span class="tag">Coroutines</span>
-              <span class="tag">Metatables</span>
+              <span class="tag">React</span>
+              <span class="tag">Vue.js</span>
+              <span class="tag">TypeScript</span>
             </div>
           </div>
           
@@ -288,42 +298,42 @@ end
             </div>
             <h3 class="skill-title">Backend Systems</h3>
             <p class="skill-description">
-              Scalable architecture, databases, and network programming
+              Scalable APIs, databases, microservices, and cloud infrastructure
             </p>
             <div class="skill-tags">
-              <span class="tag">Datastore</span>
-              <span class="tag">Redis</span>
-              <span class="tag">Web APIs</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">PostgreSQL</span>
             </div>
           </div>
           
           <div class="skill-card">
             <div class="skill-icon">
-              <i class="fas fa-gamepad"></i>
+              <i class="fas fa-cloud"></i>
             </div>
-            <h3 class="skill-title">Game Design</h3>
+            <h3 class="skill-title">Cloud & DevOps</h3>
             <p class="skill-description">
-              Player psychology, mechanics design, and monetization
+              Cloud deployment, containerization, CI/CD, and infrastructure as code
             </p>
             <div class="skill-tags">
-              <span class="tag">Game Balance</span>
-              <span class="tag">Progression</span>
-              <span class="tag">Monetization</span>
+              <span class="tag">AWS</span>
+              <span class="tag">Docker</span>
+              <span class="tag">GitHub Actions</span>
             </div>
           </div>
           
           <div class="skill-card">
             <div class="skill-icon">
-              <i class="fas fa-chart-line"></i>
+              <i class="fas fa-mobile-alt"></i>
             </div>
-            <h3 class="skill-title">Performance</h3>
+            <h3 class="skill-title">Mobile & Full Stack</h3>
             <p class="skill-description">
-              Optimization, memory management, and efficient algorithms
+              Cross-platform applications and end-to-end web solutions
             </p>
             <div class="skill-tags">
-              <span class="tag">Profiling</span>
-              <span class="tag">Memory Opt</span>
-              <span class="tag">Algorithms</span>
+              <span class="tag">React Native</span>
+              <span class="tag">PWA</span>
+              <span class="tag">REST APIs</span>
             </div>
           </div>
         </div>
@@ -331,29 +341,29 @@ end
         <div class="tech-stack">
           <h3 class="tech-title">Technology Stack</h3>
           <div class="tech-icons">
-            <div class="tech-icon" title="Lua">
-              <i class="devicon-lua-plain"></i>
-              <span>Lua</span>
+            <div class="tech-icon" title="JavaScript">
+              <i class="devicon-javascript-plain"></i>
+              <span>JavaScript</span>
+            </div>
+            <div class="tech-icon" title="React">
+              <i class="devicon-react-original"></i>
+              <span>React</span>
+            </div>
+            <div class="tech-icon" title="Node.js">
+              <i class="devicon-nodejs-plain"></i>
+              <span>Node.js</span>
+            </div>
+            <div class="tech-icon" title="MongoDB">
+              <i class="devicon-mongodb-plain"></i>
+              <span>MongoDB</span>
+            </div>
+            <div class="tech-icon" title="Docker">
+              <i class="devicon-docker-plain"></i>
+              <span>Docker</span>
             </div>
             <div class="tech-icon" title="Git">
               <i class="devicon-git-plain"></i>
               <span>Git</span>
-            </div>
-            <div class="tech-icon" title="VS Code">
-              <i class="devicon-vscode-plain"></i>
-              <span>VS Code</span>
-            </div>
-            <div class="tech-icon" title="Rojo">
-              <i class="fas fa-toolbox"></i>
-              <span>Rojo</span>
-            </div>
-            <div class="tech-icon" title="Blender">
-              <i class="devicon-blender-plain"></i>
-              <span>Blender</span>
-            </div>
-            <div class="tech-icon" title="GitHub">
-              <i class="devicon-github-plain"></i>
-              <span>GitHub</span>
             </div>
           </div>
         </div>
@@ -365,7 +375,7 @@ end
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">
-            My <span class="text-gradient">Work</span>
+            My <span class="text-gradient">Projects</span>
           </h2>
           <p class="section-subtitle">
             Professional projects and contributions
@@ -380,17 +390,17 @@ end
               </div>
               <div class="experience-badge">Featured</div>
             </div>
-            <h3 class="experience-title">Lua Portfolio</h3>
+            <h3 class="experience-title">Web Portfolio</h3>
             <p class="experience-description">
-              Collection of advanced Lua projects showcasing game systems,
-              architecture patterns, and professional development workflows.
+              Collection of modern web projects showcasing full stack development,
+              responsive design, and professional development workflows.
             </p>
             <div class="experience-tags">
-              <span class="tag">Lua</span>
-              <span class="tag">Game Systems</span>
-              <span class="tag">Architecture</span>
+              <span class="tag">React</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">MongoDB</span>
             </div>
-            <a href="Lua/Lua.html" class="experience-link">
+            <a href="#" class="experience-link">
               View Portfolio
               <i class="fas fa-arrow-right"></i>
             </a>
@@ -399,18 +409,18 @@ end
           <div class="experience-card">
             <div class="experience-header">
               <div class="experience-icon">
-                <i class="fas fa-cube"></i>
+                <i class="fas fa-shopping-cart"></i>
               </div>
             </div>
-            <h3 class="experience-title">3D Modeling</h3>
+            <h3 class="experience-title">E-commerce Platform</h3>
             <p class="experience-description">
-              High-quality 3D assets and environments for games,
-              focusing on optimization and visual quality.
+              Full-featured online store with cart, payments, and admin dashboard.
+              Built with MERN stack and Stripe integration.
             </p>
             <div class="experience-tags">
-              <span class="tag">Blender</span>
-              <span class="tag">3D Modeling</span>
-              <span class="tag">Texturing</span>
+              <span class="tag">MERN</span>
+              <span class="tag">Stripe</span>
+              <span class="tag">AWS</span>
             </div>
           </div>
           
@@ -422,7 +432,7 @@ end
             </div>
             <h3 class="experience-title">Team Projects</h3>
             <p class="experience-description">
-              Collaborative development on large-scale game projects
+              Collaborative development on large-scale applications
               with distributed teams and agile methodologies.
             </p>
             <div class="experience-tags">
@@ -462,8 +472,8 @@ end
                 </div>
                 <div>
                   <div class="contact-label">Email</div>
-                  <a href="mailto:contact@st1yler.dev" class="contact-value">
-                    contact@st1yler.dev
+                  <a href="mailto:contact@gabriel.dev" class="contact-value">
+                    contact@gabriel.dev
                   </a>
                 </div>
               </div>
@@ -493,46 +503,46 @@ end
           <div class="social-profiles">
             <h3 class="social-title">Find Me Online</h3>
             <div class="social-grid">
-              <a href="https://github.com/st1yler" target="_blank" class="social-card">
+              <a href="https://github.com/gabriel" target="_blank" class="social-card">
                 <div class="social-icon">
                   <i class="fab fa-github"></i>
                 </div>
                 <div class="social-info">
                   <div class="social-name">GitHub</div>
-                  <div class="social-handle">@st1yler</div>
+                  <div class="social-handle">@gabriel</div>
                 </div>
                 <i class="fas fa-external-link-alt social-arrow"></i>
               </a>
               
-              <a href="https://linkedin.com/in/st1yler" target="_blank" class="social-card">
+              <a href="https://linkedin.com/in/gabriel" target="_blank" class="social-card">
                 <div class="social-icon">
                   <i class="fab fa-linkedin"></i>
                 </div>
                 <div class="social-info">
                   <div class="social-name">LinkedIn</div>
-                  <div class="social-handle">st1yler</div>
+                  <div class="social-handle">gabriel</div>
                 </div>
                 <i class="fas fa-external-link-alt social-arrow"></i>
               </a>
               
-              <a href="https://discord.com/users/1044626710_w" target="_blank" class="social-card">
+              <a href="https://twitter.com/gabriel" target="_blank" class="social-card">
                 <div class="social-icon">
-                  <i class="fab fa-discord"></i>
+                  <i class="fab fa-twitter"></i>
                 </div>
                 <div class="social-info">
-                  <div class="social-name">Discord</div>
-                  <div class="social-handle">st1yler</div>
+                  <div class="social-name">Twitter</div>
+                  <div class="social-handle">@gabriel</div>
                 </div>
                 <i class="fas fa-external-link-alt social-arrow"></i>
               </a>
               
-              <a href="https://youtube.com/@st1yler" target="_blank" class="social-card">
+              <a href="https://codepen.io/gabriel" target="_blank" class="social-card">
                 <div class="social-icon">
-                  <i class="fab fa-youtube"></i>
+                  <i class="fab fa-codepen"></i>
                 </div>
                 <div class="social-info">
-                  <div class="social-name">YouTube</div>
-                  <div class="social-handle">@st1yler</div>
+                  <div class="social-name">CodePen</div>
+                  <div class="social-handle">@gabriel</div>
                 </div>
                 <i class="fas fa-external-link-alt social-arrow"></i>
               </a>
@@ -548,31 +558,30 @@ end
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <div class="footer-logo">st1yler</div>
+          <div class="footer-logo">Gabriel</div>
           <p class="footer-tagline">
-            Senior Lua Developer specializing in game architecture
+            Full Stack Developer specializing in modern web technologies
           </p>
         </div>
         
         <div class="footer-links">
           <a href="#about" class="footer-link">About</a>
           <a href="#skills" class="footer-link">Skills</a>
-          <a href="#experience" class="footer-link">Work</a>
+          <a href="#experience" class="footer-link">Projects</a>
           <a href="#contact" class="footer-link">Contact</a>
-          <a href="Lua/Lua.html" class="footer-link">Lua Portfolio</a>
         </div>
         
         <div class="footer-social">
-          <a href="https://github.com/st1yler" target="_blank" class="social-link">
+          <a href="https://github.com/gabriel" target="_blank" class="social-link">
             <i class="fab fa-github"></i>
           </a>
-          <a href="https://linkedin.com/in/st1yler" target="_blank" class="social-link">
+          <a href="https://linkedin.com/in/gabriel" target="_blank" class="social-link">
             <i class="fab fa-linkedin"></i>
           </a>
-          <a href="https://discord.com/users/1044626710_w" target="_blank" class="social-link">
-            <i class="fab fa-discord"></i>
+          <a href="https://twitter.com/gabriel" target="_blank" class="social-link">
+            <i class="fab fa-twitter"></i>
           </a>
-          <a href="mailto:contact@st1yler.dev" class="social-link">
+          <a href="mailto:contact@gabriel.dev" class="social-link">
             <i class="fas fa-envelope"></i>
           </a>
         </div>
@@ -580,9 +589,9 @@ end
       
       <div class="footer-bottom">
         <p class="copyright">
-          © 2026 st1yler. All rights reserved.
+          © 2026 Gabriel. All rights reserved.
           <span class="separator">|</span>
-          Crafted with <i class="fas fa-heart"></i> and Lua
+          Crafted with <i class="fas fa-heart"></i> and JavaScript
         </p>
       </div>
     </div>
